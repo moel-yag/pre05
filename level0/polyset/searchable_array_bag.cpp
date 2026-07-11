@@ -18,14 +18,14 @@ searchable_array_bag::~searchable_array_bag(){};
 
 bool searchable_array_bag::has(int x) const
 {
-    if (this->size_ <= 0)
+    if (this->size <= 0)
         return false;
     
     int i = 0;
     
-    while(i < this->size_)
+    while(i < this->size)
     {
-        if (this->data_[i] == x)
+        if (this->data[i] == x)
             return true;
         i++;
     }

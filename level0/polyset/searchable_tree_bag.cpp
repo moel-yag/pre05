@@ -17,7 +17,7 @@ searchable_tree_bag::~searchable_tree_bag(){};
 
 bool searchable_tree_bag::has(int x) const
 {
-    const node *cur = this->tree_;
+    const node *cur = this->tree;
 
     while (cur != 0)
     {
