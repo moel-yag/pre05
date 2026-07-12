@@ -1,29 +1,26 @@
-#ifndef SET_HPP
-#define SET_HPP
-
 #include "searchable_bag.hpp"
 
-
-class set : public searchable_bag
+// The "wrapping" process generally means that a class encloses another class,
+// function, or data to provide an interface.
+// WRAPPING BY REFERENCE
+class set
 {
-    private:
-        searchable_bag *bag_;
-    
-    public:
-        set();
-        set(searchable_bag &backend);
+	private:
+		searchable_bag& bag;
+	public:
+		set() = delete;
+		set(const set& source) = delete;
+		set& operator=(const set& source) = delete;
+		set(searchable_bag& s_bag);
 
-        set(const set &copy);
-        set &operator=(const set &other);
-        virtual ~set();
+		bool has(int) const;
+		void insert (int);
+		void insert (int *, int);
+		void print() const;
+		void clear();
 
-        virtual bool has(int x) const;
+		const searchable_bag& get_bag();
 
-        virtual void insert(int x);
-        virtual void insert(int *arr, int n);
-        virtual void print()const;
-        virtual void clear();
+		~set();
 
 };
-
-#endif
