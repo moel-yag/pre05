@@ -1,63 +1,47 @@
 #include "set.hpp"
+#include "searchable_array_bag.hpp"
 
-set::set() : bag_(0) {};
-
-set::set(searchable_bag &backend) : bag_(&backend) {};
-
-set::set(const set &copy) : bag_(copy.bag_) {};
-
-set &set::operator=(const set &other)
+set::set(searchable_bag& s_bag) : bag(s_bag)
 {
-    if (this != &other)
-    {
-        this->bag_ = other.bag_;
-    }
 
-    return *this;
 }
 
-set::~set() {};
-
-bool set::has(int x) const
+bool set::has(int value) const
 {
-    if (this->bag_ == 0)
-        return false;
+	return(bag.has(value));
+}
 
-    return this->bag_->has(x);
-};
-
-void set::insert(int x)
+void set::insert (int value)
 {
-    if (this->bag_ == 0)
-        return;
+	if(!(this->has(value)))
+		bag.insert(value);
+}
 
-    if (!this->bag_->has(x))
-        this->bag_->insert(x);
-};
-
-void set::insert(int *array, int n)
+void set::insert (int *data, int size)
 {
-    if (this->bag_ == 0 || n <= 0 || array == 0)
-        return;
-
-    int i = 0;
-    while (i < n)
-    {
-        this->insert(array[i]);
-        i++;
-    }
+	for(int i = 0; i < size; i++)
+	{
+		this->insert(data[i]);
+	}
 }
 
 void set::print() const
 {
-    if (this->bag_ == 0)
-        return;
-    this->bag_->print();
+	bag.print();
 }
 
 void set::clear()
 {
-    if (this->bag_ == 0)
-        return;
-    this->bag_->clear();
+	bag.clear();
+}
+
+const searchable_bag& set::get_bag()
+{
+	return(this->bag);
+}
+
+
+set::~set()
+{
+
 }
