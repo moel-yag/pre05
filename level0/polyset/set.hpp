@@ -1,6 +1,4 @@
-#ifndef SET_HPP
-#define SET_HPP
-
+#pragma once
 #include "searchable_bag.hpp"
 
 class set
@@ -23,5 +21,3 @@ public:
     void print() const;
     void clear();
 };
-
-#endif

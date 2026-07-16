@@ -1,5 +1,4 @@
-#ifndef SEARCHABLE_ARRAY_BAG_HPP
-#define SEARCHABLE_ARRAY_BAG_HPP
+#pragma once
 
 #include "array_bag.hpp"
 #include "searchable_bag.hpp"
@@ -13,5 +12,3 @@ public:
     bool has(int value) const;
     ~searchable_array_bag();
 };
-
-#endif

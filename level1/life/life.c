@@ -39,7 +39,6 @@ int main(int ac, char **av)
 		if (pen)
 			board[y * wd + x] = 1;
 	}
-	i = 0;
 	while (it--)
 	{
 		for (int y = 0; y < ht; y++)

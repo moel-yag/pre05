@@ -1,6 +1,4 @@
-#ifndef BIGINT_HPP
-#define BIGINT_HPP
-
+#pragma once
 #include <string>
 
 class bigint {
@@ -39,7 +37,4 @@ public:
     bool   operator==(const bigint& other) const;
     bool   operator!=(const bigint& other) const;
 };
-
 std::ostream &operator<<(std::ostream& os, const bigint& obj);
-
-#endif

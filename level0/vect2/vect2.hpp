@@ -16,7 +16,6 @@ public:
 	const int &operator[](int index) const;
 
 	vect2 operator-() const;
-
 	vect2 operator+(const vect2 &other) const;
 	vect2 operator-(const vect2 &other) const;
 	vect2 operator*(int scalar) const;

@@ -28,21 +28,16 @@ const std::string bigint::getValue() const {
 bigint bigint::operator+(const bigint& other) const { // "231" + "48"
     bigint result;
     std::string res;
-    int n1 = this->_value.size() - 1;
-    int n2 = other._value.size() - 1;
+    int n1 = this->_value.size() - 1, n2 = other._value.size() - 1;
     int rest = 0; // carry
 
     while(n1 >= 0 || n2 >= 0 || rest) {
-        if (n1 >= 0) {
-            rest = rest + _value[n1] - '0'; // 0 + 1 = 1
-            n1--;
-        }
+        if (n1 >= 0)
+            rest += _value[n1--] - '0'; // 0 + 1 = 1
         if (n2 >= 0)
             rest += other._value[n2--] - '0'; // 1 + 2 = 3
-
         res.insert(res.begin(), char((rest % 10)+'0'));
-
-        rest = rest / 10;
+        rest /= 10;
     }
     result._value = res;
     return result;
@@ -120,7 +115,7 @@ bool   bigint::operator<(const bigint& other) const {
 }
 //
 bool   bigint::operator>(const bigint& other) const { // < >=
-    return !(other < *this) ; // a > b
+    return !(other < *this); // a > b
 }
 bool   bigint::operator<=(const bigint& other) const {
     return !(*this > other);
