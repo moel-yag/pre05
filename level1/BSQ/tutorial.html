@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSQ Tutorial - 42 Exam</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182026;
+      --muted: #59656f;
+      --paper: #f6f7f9;
+      --panel: #ffffff;
+      --panel-soft: #edf7f4;
+      --line: #d9e0e5;
+      --accent: #087f8c;
+      --accent-strong: #095a66;
+      --focus: #c8553d;
+      --warn: #a63d40;
+      --ok: #2a7f62;
+      --code: #111820;
+      --shadow: 0 16px 42px rgba(30, 42, 54, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+      gap: 28px;
+      align-items: center;
+      padding: 26px 0 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 780px;
+      font-size: clamp(2.35rem, 5vw, 4.6rem);
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: clamp(1.55rem, 2.4vw, 2.25rem);
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    p + p {
+      margin-top: 12px;
+    }
+
+    a {
+      color: var(--accent-strong);
+    }
+
+    code,
+    pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    code {
+      border: 1px solid #d3dce2;
+      border-radius: 6px;
+      background: #f7fafb;
+      padding: 1px 5px;
+      font-size: 0.92em;
+    }
+
+    pre {
+      overflow: auto;
+      margin: 12px 0 0;
+      border-radius: 8px;
+      background: var(--code);
+      color: #f7fbfd;
+      padding: 16px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      white-space: pre;
+    }
+
+    pre code {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 28px;
+      height: 3px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .lead {
+      max-width: 760px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .toc a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      padding: 7px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .toc a:hover,
+    .toc a:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+
+    section {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .section-intro {
+      max-width: 840px;
+      margin-bottom: 20px;
+      color: var(--muted);
+    }
+
+    .hero-card,
+    .panel,
+    .function-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 18px;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, #ffffff 0%, #eef9f7 100%);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-demo {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 4px;
+      max-width: 380px;
+      margin: 16px auto 0;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cdd7de;
+      border-radius: 4px;
+      background: #fff;
+      color: #35434d;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: clamp(0.72rem, 2vw, 0.95rem);
+      font-weight: 800;
+    }
+
+    .cell.obs {
+      background: #f7e8ea;
+      color: var(--warn);
+    }
+
+    .cell.full {
+      background: #c9efe6;
+      border-color: #79c7b3;
+      color: var(--accent-strong);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #cdd7de;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    .swatch.obs {
+      background: #f7e8ea;
+      border-color: #e0b5bb;
+    }
+
+    .swatch.full {
+      background: #c9efe6;
+      border-color: #79c7b3;
+    }
+
+    .plain-list,
+    .checklist,
+    .steps {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .plain-list li,
+    .checklist li,
+    .steps li {
+      margin: 8px 0;
+    }
+
+    .compact {
+      margin-top: 10px;
+      font-size: 0.94rem;
+    }
+
+    .compact li {
+      margin: 5px 0;
+    }
+
+    .note {
+      margin-top: 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef7f4;
+      color: #24383b;
+      padding: 14px 16px;
+    }
+
+    .warning {
+      border-left-color: var(--warn);
+      background: #fff2f4;
+    }
+
+    .formula {
+      border: 1px solid #cfe1df;
+      border-radius: 8px;
+      background: #f5fbfa;
+      padding: 14px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.95rem;
+      overflow: auto;
+    }
+
+    .function-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .function-basics {
+      margin: 18px 0;
+    }
+
+    .function-basics .panel {
+      background: #fbfdfd;
+    }
+
+    .function-card h3 {
+      color: var(--accent-strong);
+    }
+
+    .example-label {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--accent-strong);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #cdd7de;
+      border-radius: 999px;
+      background: #f8fafb;
+      padding: 4px 9px;
+      color: #42515b;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      min-width: 880px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f4f8fa;
+      color: #263640;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      header,
+      .two-col,
+      .three-col,
+      .function-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        width: min(100% - 22px, 1120px);
+        padding-top: 18px;
+      }
+
+      section {
+        padding: 18px;
+      }
+
+      .cell {
+        border-radius: 3px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <span class="eyebrow">42 exam subject</span>
+        <h1>BSQ Tutorial</h1>
+        <p class="lead">
+          BSQ asks you to read a map, validate it, find the biggest square that avoids obstacles,
+          draw that square with the full character, and print the result. This page explains the
+          subject first, then focuses on the allowed functions with small examples that are not a
+          complete BSQ solution.
+        </p>
+        <nav class="toc" aria-label="Tutorial sections">
+          <a href="#subject">Subject</a>
+          <a href="#map-format">Map Format</a>
+          <a href="#validation">Validation</a>
+          <a href="#algorithm">Algorithm</a>
+          <a href="#functions">Functions</a>
+          <a href="#function-habits">Function Habits</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#mistakes">Mistakes</a>
+        </nav>
+      </div>
+      <aside class="hero-card" aria-label="BSQ visual example">
+        <h2>Goal</h2>
+        <p>Replace empty cells with the full character to show the largest possible square.</p>
+        <div class="grid-demo" aria-hidden="true">
+          <span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell obs">o</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span>
+          <span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell">.</span><span class="cell">.</span><span class="cell obs">o</span><span class="cell">.</span><span class="cell">.</span>
+          <span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span>
+          <span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell">.</span><span class="cell obs">o</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span>
+          <span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell full">x</span><span class="cell">.</span><span class="cell">.</span><span class="cell">.</span><span class="cell obs">o</span><span class="cell">.</span>
+        </div>
+        <div class="legend">
+          <span><i class="swatch"></i> empty</span>
+          <span><i class="swatch obs"></i> obstacle</span>
+          <span><i class="swatch full"></i> full</span>
+        </div>
+      </aside>
+    </header>
+
+    <section id="subject">
+      <h2>What BSQ Wants</h2>
+      <p class="section-intro">
+        Your program receives one or more maps. For each valid map, it prints the map again after
+        marking the biggest square. For each invalid map, it prints <code>map error</code> to the
+        error output.
+      </p>
+      <div class="three-col">
+        <article class="panel">
+          <h3>Read</h3>
+          <p>Open each file argument, or read from <code>stdin</code> when no argument is passed.</p>
+        </article>
+        <article class="panel">
+          <h3>Validate</h3>
+          <p>Check the header, characters, line count, line width, and final newlines.</p>
+        </article>
+        <article class="panel">
+          <h3>Solve</h3>
+          <p>Find the largest square. If there is a tie, choose the highest one, then the leftmost one.</p>
+        </article>
+      </div>
+      <div class="note">
+        This tutorial explains the strategy and the allowed C functions. It does not give a full BSQ
+        implementation, so you still practice the real exam logic yourself.
+      </div>
+    </section>
+
+    <section id="map-format">
+      <h2>Map Format</h2>
+      <p class="section-intro">
+        In this subject file, the first line is space separated. It tells you the number of map lines,
+        the empty character, the obstacle character, and the full character.
+      </p>
+      <div class="two-col">
+        <article class="panel">
+          <h3>Example input</h3>
+          <pre><code>9 . o x
+...........................
+....o......................
+............o..............
+...........................
+....o......................
+...............o...........
+...........................
+......o..............o.....
+..o.......o................</code></pre>
+        </article>
+        <article class="panel">
+          <h3>Header meaning</h3>
+          <ul class="plain-list">
+            <li><code>9</code>: the map has 9 rows.</li>
+            <li><code>.</code>: empty cells can be used in the square.</li>
+            <li><code>o</code>: obstacle cells block the square.</li>
+            <li><code>x</code>: full cells are used to draw the answer.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="validation">
+      <h2>Validation Checklist</h2>
+      <p class="section-intro">
+        A strong BSQ solution fails fast on bad input and frees memory before moving to the next map.
+      </p>
+      <div class="two-col">
+        <article class="panel">
+          <h3>Header checks</h3>
+          <ul class="checklist">
+            <li>The line count exists and is greater than zero.</li>
+            <li>The empty, obstacle, and full characters all exist.</li>
+            <li>Those three characters are different from each other.</li>
+            <li>The three map characters are printable characters.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Map checks</h3>
+          <ul class="checklist">
+            <li>There is at least one row and at least one column.</li>
+            <li>Every row has exactly the same width.</li>
+            <li>Every row ends with a newline in the input.</li>
+            <li>Every cell is either the empty character or the obstacle character.</li>
+            <li>The real number of rows matches the header number.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="note warning">
+        Print <code>map error</code> with <code>fprintf(stderr, "map error\n");</code>, not to standard output.
+      </div>
+    </section>
+
+    <section id="algorithm">
+      <h2>The Solving Idea</h2>
+      <p class="section-intro">
+        The usual BSQ technique is dynamic programming. Instead of trying every square directly,
+        store the biggest square size that can end at each cell.
+      </p>
+      <div class="two-col">
+        <article class="panel">
+          <h3>Rule</h3>
+          <div class="formula">
+            if cell is obstacle: dp[row][col] = 0<br>
+            else if row == 0 or col == 0: dp[row][col] = 1<br>
+            else: dp[row][col] = 1 + min(top, left, top_left)
+          </div>
+          <p class="note">
+            When you find a bigger value, remember its size and bottom-right position. If values tie,
+            keep the first one found while scanning top to bottom, left to right.
+          </p>
+        </article>
+        <article class="panel">
+          <h3>Why the tie rule works</h3>
+          <p>
+            If you scan rows from top to bottom and columns from left to right, the first square of a
+            given size is already the highest, then the leftmost. Only update your best answer when
+            the new square is strictly bigger.
+          </p>
+          <ol class="steps">
+            <li>Build or update a DP grid while reading the map.</li>
+            <li>Track best size, best row, and best column.</li>
+            <li>After solving, replace the matching cells in the original map with the full character.</li>
+            <li>Print each row to <code>stdout</code>.</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section id="functions">
+      <h2>Allowed Functions</h2>
+      <p class="section-intro">
+        These examples are intentionally small and generic. They show how each tool behaves without
+        solving BSQ for you.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Use it for</th>
+              <th>Important return value</th>
+              <th>Useful notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>malloc</code></td>
+              <td>Allocate memory when you know the needed byte count.</td>
+              <td>Returns a pointer, or <code>NULL</code> if allocation fails.</td>
+              <td>The memory is uninitialized. Write values before reading from it.</td>
+            </tr>
+            <tr>
+              <td><code>calloc</code></td>
+              <td>Allocate memory initialized to zero.</td>
+              <td>Returns a pointer, or <code>NULL</code>.</td>
+              <td>Good for arrays of numbers or pointers that should start as zero or <code>NULL</code>.</td>
+            </tr>
+            <tr>
+              <td><code>realloc</code></td>
+              <td>Resize an existing allocation.</td>
+              <td>Returns the new pointer, or <code>NULL</code>. Use a temporary pointer.</td>
+              <td>If it fails, the old pointer is still valid. Do not overwrite it too early.</td>
+            </tr>
+            <tr>
+              <td><code>free</code></td>
+              <td>Release memory you allocated.</td>
+              <td>No return value. Calling <code>free(NULL)</code> is allowed.</td>
+              <td>Only free pointers from allocation functions, and free each allocation once.</td>
+            </tr>
+            <tr>
+              <td><code>fopen</code> / <code>fclose</code></td>
+              <td>Open and close files as <code>FILE *</code> streams.</td>
+              <td><code>fopen</code> returns <code>NULL</code> on failure. <code>fclose</code> returns <code>0</code> on success.</td>
+              <td>Use <code>"r"</code> for reading. After <code>fclose</code>, the stream pointer must not be used again.</td>
+            </tr>
+            <tr>
+              <td><code>getline</code></td>
+              <td>Read one full line from a stream, growing the buffer when needed.</td>
+              <td>Returns the number of characters read, or <code>-1</code> at EOF/error.</td>
+              <td>The returned line usually includes the final newline. The buffer must be freed.</td>
+            </tr>
+            <tr>
+              <td><code>fscanf</code></td>
+              <td>Parse formatted input from a stream.</td>
+              <td>Returns how many items were successfully read.</td>
+              <td>Whitespace in the format matters. <code>%c</code> reads one raw character.</td>
+            </tr>
+            <tr>
+              <td><code>fputs</code> / <code>fprintf</code></td>
+              <td>Write strings or formatted output to <code>stdout</code>, <code>stderr</code>, or a file.</td>
+              <td><code>fputs</code> returns a non-negative value on success. <code>fprintf</code> returns characters written, or a negative value.</td>
+              <td><code>fputs</code> does not add a newline. <code>fprintf</code> is better for variables.</td>
+            </tr>
+            <tr>
+              <td><code>errno</code></td>
+              <td>Inspect some library errors after a failed call.</td>
+              <td>It is a variable, not a function. Check it after a function reports failure.</td>
+              <td>It is for debugging or decisions, not automatically for exam output.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="three-col function-basics" id="function-habits">
+        <article class="panel">
+          <h3>Before calling</h3>
+          <ul class="plain-list compact">
+            <li>Know who owns the memory or file stream.</li>
+            <li>Know which return value means success.</li>
+            <li>Initialize pointers to <code>NULL</code> before cleanup-heavy code.</li>
+            <li>Keep sizes in <code>size_t</code> when they represent byte counts or buffer capacity.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>After calling</h3>
+          <ul class="plain-list compact">
+            <li>Check the return value immediately.</li>
+            <li>Do not read from uninitialized memory.</li>
+            <li>Do not use a closed file stream.</li>
+            <li>Free buffers created by <code>malloc</code>, <code>calloc</code>, <code>realloc</code>, or <code>getline</code>.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Headers and types</h3>
+          <ul class="plain-list compact">
+            <li><code>&lt;stdlib.h&gt;</code>: <code>malloc</code>, <code>calloc</code>, <code>realloc</code>, <code>free</code>.</li>
+            <li><code>&lt;stdio.h&gt;</code>: <code>FILE</code>, streams, <code>getline</code>, <code>fscanf</code>, output functions.</li>
+            <li><code>&lt;errno.h&gt;</code>: <code>errno</code>.</li>
+            <li><code>&lt;sys/types.h&gt;</code>: often used for <code>ssize_t</code>.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Good cleanup pattern</h3>
+          <p>Initialize pointers, clean what you own, and return only after releasing memory.</p>
+          <pre><code>int result;
+char *buffer;
+
+buffer = NULL;
+buffer = malloc(20);
+if (buffer == NULL)
+{
+    free(buffer);
+    return (1);
+}
+/* use buffer here */
+result = 0;
+
+free(buffer);
+return (result);</code></pre>
+        </article>
+      </div>
+
+      <div class="function-grid" aria-label="Function examples">
+        <article class="function-card">
+          <h3>malloc</h3>
+          <p>Use <code>malloc</code> when you need a buffer and you know the number of bytes.</p>
+          <div class="meta"><span class="pill">stdlib.h</span><span class="pill">remember free</span></div>
+          <pre><code>char *name;
+
+name = malloc(6);
+if (name == NULL)
+    return (1);
+name[0] = 'h';
+name[1] = 'e';
+name[2] = 'l';
+name[3] = 'l';
+name[4] = 'o';
+name[5] = '\0';
+fputs(name, stdout);
+free(name);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> you get a block of memory, but its contents are random.</li>
+            <li><strong>Failure:</strong> you get <code>NULL</code>; do not write through it.</li>
+            <li><strong>Useful habit:</strong> allocate <code>count * sizeof(type)</code>, not a guessed byte number.</li>
+          </ul>
+          <span class="example-label">Array example</span>
+          <pre><code>int *values;
+int count;
+int i;
+
+count = 5;
+values = malloc(count * sizeof(int));
+if (values == NULL)
+    return (1);
+i = 0;
+while (i &lt; count)
+{
+    values[i] = i * 10;
+    i++;
+}
+free(values);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>calloc</h3>
+          <p><code>calloc</code> is useful when zero is a safe initial value for every element.</p>
+          <div class="meta"><span class="pill">stdlib.h</span><span class="pill">zero-filled</span></div>
+          <pre><code>int *scores;
+int i;
+
+scores = calloc(4, sizeof(int));
+if (scores == NULL)
+    return (1);
+i = 0;
+while (i &lt; 4)
+{
+    fprintf(stdout, "%d\n", scores[i]);
+    i++;
+}
+free(scores);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> every byte starts at zero.</li>
+            <li><strong>Failure:</strong> returns <code>NULL</code>, same as <code>malloc</code>.</li>
+            <li><strong>Useful habit:</strong> use it for arrays where zero means "empty" or "not counted yet".</li>
+          </ul>
+          <span class="example-label">Pointer array example</span>
+          <pre><code>char **words;
+int count;
+
+count = 3;
+words = calloc(count, sizeof(char *));
+if (words == NULL)
+    return (1);
+/* words[0], words[1], words[2] are all NULL */
+free(words);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>realloc</h3>
+          <p>Use a temporary pointer so you do not lose the old allocation when resizing fails.</p>
+          <div class="meta"><span class="pill">stdlib.h</span><span class="pill">resize memory</span></div>
+          <pre><code>char *buffer;
+char *tmp;
+
+buffer = malloc(8);
+if (buffer == NULL)
+    return (1);
+tmp = realloc(buffer, 32);
+if (tmp == NULL)
+{
+    free(buffer);
+    return (1);
+}
+buffer = tmp;
+free(buffer);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> you must use the returned pointer from now on.</li>
+            <li><strong>Failure:</strong> the old pointer is still valid and still must be freed.</li>
+            <li><strong>Useful habit:</strong> grow capacity by doubling it instead of resizing by one each time.</li>
+          </ul>
+          <span class="example-label">Growing array example</span>
+          <pre><code>int *numbers;
+int *tmp;
+int capacity;
+
+capacity = 4;
+numbers = malloc(capacity * sizeof(int));
+if (numbers == NULL)
+    return (1);
+capacity = capacity * 2;
+tmp = realloc(numbers, capacity * sizeof(int));
+if (tmp == NULL)
+{
+    free(numbers);
+    return (1);
+}
+numbers = tmp;
+free(numbers);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>free</h3>
+          <p>Free every allocation once. Setting the pointer to <code>NULL</code> after freeing can prevent accidental reuse.</p>
+          <div class="meta"><span class="pill">stdlib.h</span><span class="pill">cleanup</span></div>
+          <pre><code>char *line;
+
+line = malloc(100);
+if (line == NULL)
+    return (1);
+/* use line here */
+free(line);
+line = NULL;</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> there is no return value; the memory is released.</li>
+            <li><strong>Danger:</strong> double-free, freeing stack memory, or using memory after <code>free</code> is undefined behavior.</li>
+            <li><strong>Useful habit:</strong> when freeing a list of pointers, free the inside allocations first.</li>
+          </ul>
+          <span class="example-label">Array of strings cleanup</span>
+          <pre><code>char **lines;
+int i;
+
+lines = calloc(3, sizeof(char *));
+if (lines == NULL)
+    return (1);
+lines[0] = malloc(10);
+lines[1] = malloc(10);
+lines[2] = malloc(10);
+if (lines[0] == NULL || lines[1] == NULL || lines[2] == NULL)
+{
+    i = 0;
+    while (i &lt; 3)
+    {
+        free(lines[i]);
+        i++;
+    }
+    free(lines);
+    return (1);
+}
+i = 0;
+while (i &lt; 3)
+{
+    free(lines[i]);
+    i++;
+}
+free(lines);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>fopen and fclose</h3>
+          <p>Open a file, check the returned stream, and always close it when you are done.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">FILE *</span></div>
+          <pre><code>FILE *file;
+
+file = fopen("notes.txt", "r");
+if (file == NULL)
+{
+    fprintf(stderr, "cannot open file\n");
+    return (1);
+}
+/* read from file here */
+if (fclose(file) != 0)
+    fprintf(stderr, "close failed\n");</code></pre>
+          <ul class="plain-list compact">
+            <li><strong><code>fopen</code> success:</strong> returns a usable <code>FILE *</code>.</li>
+            <li><strong><code>fopen</code> failure:</strong> returns <code>NULL</code>; do not call <code>getline</code>, <code>fscanf</code>, or <code>fclose</code> on it.</li>
+            <li><strong><code>fclose</code> failure:</strong> returns a nonzero value, often because buffered output could not be flushed.</li>
+            <li><strong>Useful habit:</strong> close only files you opened. Do not close <code>stdin</code> unless you have a special reason.</li>
+          </ul>
+          <span class="example-label">Use file or stdin</span>
+          <pre><code>FILE *input;
+int should_close;
+
+input = stdin;
+should_close = 0;
+if (argc &gt; 1)
+{
+    input = fopen(argv[1], "r");
+    if (input == NULL)
+        return (1);
+    should_close = 1;
+}
+/* read from input here */
+if (should_close &amp;&amp; fclose(input) != 0)
+    return (1);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>getline</h3>
+          <p><code>getline</code> can allocate the buffer for you if <code>line</code> is <code>NULL</code> and <code>cap</code> is zero.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">sys/types.h</span></div>
+          <pre><code>char    *line;
+size_t  cap;
+ssize_t len;
+
+line = NULL;
+cap = 0;
+len = getline(&amp;line, &amp;cap, stdin);
+if (len == -1)
+{
+    free(line);
+    return (1);
+}
+fprintf(stdout, "read %zd chars\n", len);
+free(line);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> returns the number of characters stored, including the newline if one was read.</li>
+            <li><strong>EOF:</strong> returns <code>-1</code> when there is no more input.</li>
+            <li><strong>Error:</strong> also returns <code>-1</code>; <code>errno</code> can help you debug the difference.</li>
+            <li><strong>Useful habit:</strong> reuse the same <code>line</code> and <code>cap</code> in a loop, then free once at the end.</li>
+          </ul>
+          <span class="example-label">Strip newline</span>
+          <pre><code>if (len &gt; 0 &amp;&amp; line[len - 1] == '\n')
+{
+    line[len - 1] = '\0';
+    len--;
+}</code></pre>
+          <span class="example-label">Read until EOF</span>
+          <pre><code>char    *line;
+size_t  cap;
+ssize_t len;
+
+line = NULL;
+cap = 0;
+while ((len = getline(&amp;line, &amp;cap, stdin)) != -1)
+    fprintf(stdout, "line length: %zd\n", len);
+free(line);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>fscanf</h3>
+          <p>Always check how many values were read. A partial match means the input is not what you expected.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">formatted input</span></div>
+          <pre><code>int  amount;
+char symbol;
+
+if (fscanf(stdin, "%d %c", &amp;amount, &amp;symbol) != 2)
+{
+    fprintf(stderr, "bad input\n");
+    return (1);
+}
+fprintf(stdout, "amount=%d symbol=%c\n", amount, symbol);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Full success:</strong> return value equals the number of conversions you asked for.</li>
+            <li><strong>Partial success:</strong> return value is smaller; some variables may already be changed.</li>
+            <li><strong>EOF before reading:</strong> returns <code>EOF</code>, which is normally <code>-1</code>.</li>
+            <li><strong>Useful habit:</strong> use a leading space before <code>%c</code> when you want to skip whitespace.</li>
+            <li><strong>Trap:</strong> after <code>fscanf</code>, the rest of the line may still be waiting for the next read.</li>
+          </ul>
+          <span class="example-label">Raw char vs skipped whitespace</span>
+          <pre><code>char raw;
+char visible;
+
+if (fscanf(stdin, "%c", &amp;raw) != 1)
+    return (1);
+if (fscanf(stdin, " %c", &amp;visible) != 1)
+    return (1);</code></pre>
+          <span class="example-label">Check exact conversion count</span>
+          <pre><code>int hour;
+int minute;
+
+if (fscanf(stdin, "%d:%d", &amp;hour, &amp;minute) != 2)
+{
+    fprintf(stderr, "bad time\n");
+    return (1);
+}</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>fputs</h3>
+          <p><code>fputs</code> writes a string exactly as given. Add <code>\n</code> yourself when needed.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">string output</span></div>
+          <pre><code>if (fputs("hello\n", stdout) &lt; 0)
+{
+    fprintf(stderr, "write failed\n");
+    return (1);
+}</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> returns a non-negative value.</li>
+            <li><strong>Failure:</strong> returns <code>EOF</code>; output may be incomplete.</li>
+            <li><strong>Useful habit:</strong> use it for already-built strings, not for numbers or formatting.</li>
+          </ul>
+          <span class="example-label">Write to a file stream</span>
+          <pre><code>FILE *out;
+
+out = fopen("result.txt", "w");
+if (out == NULL)
+    return (1);
+if (fputs("saved\n", out) &lt; 0)
+{
+    fclose(out);
+    return (1);
+}
+if (fclose(out) != 0)
+    return (1);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>fprintf</h3>
+          <p>Use <code>fprintf</code> when you need formatted output or when you must write to <code>stderr</code>.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">formatted output</span></div>
+          <pre><code>int row;
+int col;
+
+row = 3;
+col = 7;
+fprintf(stdout, "row=%d col=%d\n", row, col);
+fprintf(stderr, "map error\n");</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Success:</strong> returns how many characters were written.</li>
+            <li><strong>Failure:</strong> returns a negative value.</li>
+            <li><strong>Useful habit:</strong> write normal program results to <code>stdout</code> and error messages to <code>stderr</code>.</li>
+            <li><strong>Common formats:</strong> <code>%d</code> for <code>int</code>, <code>%c</code> for <code>char</code>, <code>%s</code> for strings, <code>%zu</code> for <code>size_t</code>, <code>%zd</code> for <code>ssize_t</code>.</li>
+          </ul>
+          <span class="example-label">Check output failure</span>
+          <pre><code>int value;
+
+value = 42;
+if (fprintf(stdout, "value=%d\n", value) &lt; 0)
+{
+    fprintf(stderr, "could not write output\n");
+    return (1);
+}</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>stdin, stdout, stderr</h3>
+          <p>These are already-open streams: input, normal output, and error output.</p>
+          <div class="meta"><span class="pill">stdio.h</span><span class="pill">streams</span></div>
+          <pre><code>char *line;
+size_t cap;
+
+line = NULL;
+cap = 0;
+if (getline(&amp;line, &amp;cap, stdin) != -1)
+    fputs(line, stdout);
+else
+    fprintf(stderr, "nothing to read\n");
+free(line);</code></pre>
+          <ul class="plain-list compact">
+            <li><code>stdin</code> is where input comes from when no file is given or when using shell pipes.</li>
+            <li><code>stdout</code> is for correct program output.</li>
+            <li><code>stderr</code> is for errors and diagnostics. It is separate from normal output.</li>
+            <li><strong>Useful habit:</strong> keep required output clean. Debug text should go to <code>stderr</code> or be removed.</li>
+          </ul>
+          <span class="example-label">Pipe-friendly program shape</span>
+          <pre><code>FILE *input;
+
+input = stdin;
+/* This works with:
+   ./program
+   echo hello | ./program
+   ./program &lt; input.txt
+*/</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>errno</h3>
+          <p><code>errno</code> may hold an error number after a library call fails. Do not use it before checking failure first.</p>
+          <div class="meta"><span class="pill">errno.h</span><span class="pill">error number</span></div>
+          <pre><code>FILE *file;
+
+errno = 0;
+file = fopen("missing.txt", "r");
+if (file == NULL)
+{
+    fprintf(stderr, "open failed, errno=%d\n", errno);
+    return (1);
+}
+fclose(file);</code></pre>
+          <ul class="plain-list compact">
+            <li><strong>Useful for:</strong> understanding why calls like <code>fopen</code>, <code>getline</code>, or allocation failed.</li>
+            <li><strong>Not useful for:</strong> deciding that an error happened before checking the function return value.</li>
+            <li><strong>Important:</strong> successful functions do not have to reset <code>errno</code> to zero.</li>
+            <li><strong>Exam habit:</strong> if the subject requires exact text, print exact text, not <code>errno</code> debugging output.</li>
+          </ul>
+          <span class="example-label">Correct errno timing</span>
+          <pre><code>errno = 0;
+file = fopen("data.txt", "r");
+if (file == NULL)
+{
+    fprintf(stderr, "fopen failed with errno=%d\n", errno);
+    return (1);
+}
+fclose(file);</code></pre>
+        </article>
+
+        <article class="function-card">
+          <h3>Multiple files</h3>
+          <p>When there are several arguments, process each stream separately and print a blank line after each result or error.</p>
+          <div class="meta"><span class="pill">argv loop</span><span class="pill">exam behavior</span></div>
+          <pre><code>int i;
+
+i = 1;
+while (i &lt; argc)
+{
+    fprintf(stdout, "processing %s\n", argv[i]);
+    if (i + 1 &lt; argc)
+        fputs("\n", stdout);
+    i++;
+}</code></pre>
+          <ul class="plain-list compact">
+            <li>Each file should be opened, processed, closed, and cleaned independently.</li>
+            <li>If one file is invalid or cannot open, continue with the next one when the subject asks for that behavior.</li>
+            <li>Do not keep old state between files unless you intentionally reset it.</li>
+          </ul>
+          <span class="example-label">Independent file loop</span>
+          <pre><code>int i;
+FILE *file;
+
+i = 1;
+while (i &lt; argc)
+{
+    file = fopen(argv[i], "r");
+    if (file == NULL)
+        fprintf(stderr, "error\n");
+    else
+    {
+        /* process file here */
+        fclose(file);
+    }
+    i++;
+}</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <h2>Recommended Workflow</h2>
+      <p class="section-intro">
+        Build the program in small parts. BSQ gets much easier when parsing, validation, solving,
+        drawing, and cleanup are separate responsibilities.
+      </p>
+      <ol class="steps">
+        <li>Create a structure that stores width, height, characters, and the map rows.</li>
+        <li>Write a function that reads the header and rejects invalid characters.</li>
+        <li>Write a function that reads all rows, checks row width, and stores them.</li>
+        <li>Write the dynamic-programming solver and only store the best square position.</li>
+        <li>Write a drawing function that fills the chosen square in the map.</li>
+        <li>Write a printing function that sends rows to <code>stdout</code>.</li>
+        <li>Write cleanup functions and call them on both success and failure.</li>
+      </ol>
+      <div class="note">
+        A clean mental model: input creates a map, validation protects the solver, the solver finds
+        coordinates, drawing changes the map, output prints it, cleanup releases everything.
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <h2>Common Mistakes</h2>
+      <div class="two-col">
+        <article class="panel">
+          <h3>Input bugs</h3>
+          <ul class="plain-list">
+            <li>Accepting rows with different lengths.</li>
+            <li>Forgetting that <code>getline</code> keeps the newline in the buffer.</li>
+            <li>Printing <code>map error</code> to <code>stdout</code> instead of <code>stderr</code>.</li>
+            <li>Not handling the no-argument case with <code>stdin</code>.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Memory bugs</h3>
+          <ul class="plain-list">
+            <li>Losing the original pointer after a failed <code>realloc</code>.</li>
+            <li>Freeing only the array of rows, not each row inside it.</li>
+            <li>Returning early on an error without closing the file.</li>
+            <li>Updating the best square on equal size and breaking the top-left tie rule.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Open this file directly in a browser: <code>BSQ/tutorial.html</code>
+    </p>
+  </main>
+</body>
+</html>
