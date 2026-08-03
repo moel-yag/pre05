@@ -1,4 +1,4 @@
-#include "BSQ.h"
+#include "bsq.h"
 
 t_game g_game;
 
