@@ -2,6 +2,19 @@
 
 t_game game;
 
+void init_game()
+{
+    game.width = -1;
+    game.height = -1;
+    game.empty = '\0';
+    game.obst = '\0';
+    game.draw = '\0';
+    game.cells = NULL;
+    game.start.x = -1;
+    game.start.y = -1;
+    game.square_size = 0;
+}
+
 int check_line(char *line, int read)
 {
     if (read < 1) return -1;
@@ -59,37 +72,6 @@ int read_curr_file(char *filename)
     return 0;
 }
 
-void print_map()
-{
-    for (int i = 0; i < game.height; i++)
-        fprintf(stdout, "%s\n", game.cells[i]);
-}
-
-void free_map()
-{
-    if (!game.cells) return;
-    for (int i = 0; i < game.height; i++)
-    {
-        free(game.cells[i]);
-        game.cells[i] = NULL;
-    }
-    free(game.cells);
-    game.cells = NULL;
-}
-
-void init_game()
-{
-    game.width = -1;
-    game.height = -1;
-    game.empty = '\0';
-    game.obst = '\0';
-    game.draw = '\0';
-    game.cells = NULL;
-    game.start.x = -1;
-    game.start.y = -1;
-    game.square_size = 0;
-}
-
 int check_square(int x, int y, int size)
 {
     for (int i = 0; i < size; i++)
@@ -131,6 +113,24 @@ void draw_largest_square()
     for (int i = 0; i < game.square_size; i++)
         for (int j = 0; j < game.square_size; j++)
             game.cells[game.start.y + i][game.start.x + j] = game.draw;
+}
+
+void print_map()
+{
+    for (int i = 0; i < game.height; i++)
+        fprintf(stdout, "%s\n", game.cells[i]);
+}
+
+void free_map()
+{
+    if (!game.cells) return;
+    for (int i = 0; i < game.height; i++)
+    {
+        free(game.cells[i]);
+        game.cells[i] = NULL;
+    }
+    free(game.cells);
+    game.cells = NULL;
 }
 
 int main(int argc, char *argv[])
